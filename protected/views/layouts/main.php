@@ -27,7 +27,32 @@
 
 <div class="container" id="page">
 
-<?php $this
+<?php 
+	
+	if(isset(Yii::app()->user->username)){
+		$username = Yii::app()->user->username;
+		$user = array('label' => $username,
+									'url' => '#',
+														'items' => array(
+																
+																array(
+																		'label' => 'Create Post',
+																		'url' => Yii::app()->baseurl.'/index.php/posts/create'),
+																array(
+																		'label' => 'Something else here',
+																		'url' => '#'),
+																'---',
+																array(
+																		'label' => 'Log Out',
+																		'url' => Yii::app()->baseurl.'/index.php/site/logout'),
+																));
+	}
+	
+	else{
+		$user = array();
+	}
+
+	$this
 		->widget('bootstrap.widgets.BootNavbar',
 				array('fixed' => false,
 						'brand' => CHtml::encode(Yii::app()->name),
@@ -37,7 +62,7 @@
 								array('class' => 'bootstrap.widgets.BootMenu',
 										'items' => array(
 												array('label'=>'Home', 'url'=>array('/site/index')),
-                								
+                								array('label'=>'logout', 'url'=>array('site/logout')),
 												array('label' => 'Posts',
 														'url' => '#',
 														'items' => array(
@@ -69,7 +94,7 @@
 										'items' => array(
 												array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
 												array('label'=>'Contact', 'url'=>array('/site/contact')),
-												
+												$user,
 												/*array('label' => 'Posts',
 														'url' => '#',
 														'items' => array(

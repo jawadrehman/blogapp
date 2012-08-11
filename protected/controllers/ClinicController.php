@@ -1,6 +1,6 @@
 <?php
 
-class PostsController extends Controller {
+class ClinicController extends Controller {
 	/**
 	 * @var string the default layout for the views. Defaults to '//layouts/column2', meaning
 	 * using two-column layout. See 'protected/views/layouts/column2.php'.
@@ -22,8 +22,8 @@ class PostsController extends Controller {
 	 */
 	public function accessRules() {
 		return array( array('allow', // allow all users to perform 'index' and 'view' actions
-		'actions' => array('index', 'view', 'updateajax', 'list_posts', 'update', 'create'), 'users' => array('*'), ), array('allow', // allow authenticated user to perform 'create' and 'update' actions
-		'actions' => array(), 'users' => array('jawadrehman'), ), array('allow', // allow admin user to perform 'admin' and 'delete' actions
+		'actions' => array('index', 'view'), 'users' => array('*'), ), array('allow', // allow authenticated user to perform 'create' and 'update' actions
+		'actions' => array('create', 'update', 'image_upload'), 'users' => array('@'), ), array('allow', // allow admin user to perform 'admin' and 'delete' actions
 		'actions' => array('admin', 'delete'), 'users' => array('jawadrehman'), ), array('deny', // deny all users
 		'users' => array('*'), ), );
 	}
@@ -41,18 +41,22 @@ class PostsController extends Controller {
 	 * If creation is successful, the browser will be redirected to the 'view' page.
 	 */
 	public function actionCreate() {
-		$model = new Posts;
+		$model = new Clinic;
 
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if (isset($_POST['Posts'])) {
-			$model -> attributes = $_POST['Posts'];
+		if (isset($_POST['Clinic'])) {
+			$count = Clinic::model() -> count();
+			$directory = 'uploads/' . $count . '/';
+			$filecount = count(glob($directory));
+			$model -> attributes = $_POST['Clinic'];
+			$model -> photocount = $filecount;
 			if ($model -> save())
 				$this -> redirect(array('view', 'id' => $model -> id));
 		}
 
-		$this -> render('create', array('model' => $model));
+		$this -> render('create', array('model' => $model, ));
 	}
 
 	/**
@@ -66,8 +70,8 @@ class PostsController extends Controller {
 		// Uncomment the following line if AJAX validation is needed
 		// $this->performAjaxValidation($model);
 
-		if (isset($_POST['Posts'])) {
-			$model -> attributes = $_POST['Posts'];
+		if (isset($_POST['Clinic'])) {
+			$model -> attributes = $_POST['Clinic'];
 			if ($model -> save())
 				$this -> redirect(array('view', 'id' => $model -> id));
 		}
@@ -96,33 +100,24 @@ class PostsController extends Controller {
 	 * Lists all models.
 	 */
 	public function actionIndex() {
-
-		$dataProvider = new CActiveDataProvider('Posts');
-		$this -> render('index', array('dataProvider' => $dataProvider, 'myValue' => "content"));
-	}
-	
-	public function actionList_Posts($id){
-		$dataProvider = new CActiveDataProvider('Posts');
-		$load_no = $id;
-		$this -> renderPartial('list_posts', array('dataProvider' => $dataProvider, 'load_no' => $load_no), false, true);
+		$dataProvider = new CActiveDataProvider('Clinic');
+		$this -> render('index', array('dataProvider' => $dataProvider, ));
 	}
 
-	public function actionUpdateAjax($id) {
-		$data = array();
-		$data["myValue"] = $this -> loadModel($id) -> content;
-		//$this -> renderPartial('view', array('model' => $this -> loadModel($id), ));
-		$this -> renderPartial('_ajaxContent', $data, false, true);
+	public function actionImage_upload() {
+		
+		$this -> renderPartial('image_upload', array(), false, true);
 	}
 
 	/**
 	 * Manages all models.
 	 */
 	public function actionAdmin() {
-		$model = new Posts('search');
+		$model = new Clinic('search');
 		$model -> unsetAttributes();
 		// clear any default values
-		if (isset($_GET['Posts']))
-			$model -> attributes = $_GET['Posts'];
+		if (isset($_GET['Clinic']))
+			$model -> attributes = $_GET['Clinic'];
 
 		$this -> render('admin', array('model' => $model, ));
 	}
@@ -133,7 +128,7 @@ class PostsController extends Controller {
 	 * @param integer the ID of the model to be loaded
 	 */
 	public function loadModel($id) {
-		$model = Posts::model() -> findByPk($id);
+		$model = Clinic::model() -> findByPk($id);
 		if ($model === null)
 			throw new CHttpException(404, 'The requested page does not exist.');
 		return $model;
@@ -144,11 +139,10 @@ class PostsController extends Controller {
 	 * @param CModel the model to be validated
 	 */
 	protected function performAjaxValidation($model) {
-		if (isset($_POST['ajax']) && $_POST['ajax'] === 'posts-form') {
+		if (isset($_POST['ajax']) && $_POST['ajax'] === 'clinic-form') {
 			echo CActiveForm::validate($model);
 			Yii::app() -> end();
 		}
 	}
 
 }
-?>

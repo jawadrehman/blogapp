@@ -1,4 +1,12 @@
-<?php $this->pageTitle=Yii::app()->name;
+<?php 
+if(isset($_GET['logout'])){
+	
+	$logout = $_GET['logout'];
+	if(!empty($logout)){
+			
+	}
+}
+$this->pageTitle=Yii::app()->name;
  
 
 $this->widget('bootstrap.widgets.BootCarousel', array(

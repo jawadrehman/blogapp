@@ -1,5 +1,5 @@
 <?php $this->beginContent('//layouts/main'); ?>
-<div class="span-19">
+<div class="span-23">
 	<div id="content">
 		<?php echo $content; ?>
 	</div><!-- content -->
@@ -9,7 +9,7 @@
 <div class="span-5 last">
 	<div id="sidebar">
 	
-	<h3> Operations </h3>
+	
 	<?php
 		/*
 		$this->beginWidget('zii.widgets.CPortlet', array(
@@ -31,11 +31,13 @@
 		
 		*/
 	
-	
+	if(isset(Yii::app()->user->username)){
+	'<h3> Operations </h3>';
 	$this->widget('bootstrap.widgets.BootMenu', array(
 			'type'=>'list',
 			'items'=> $this ->  menu,
 	));
+	}
 		
 		
 		

@@ -26,7 +26,7 @@ return array('basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
 		'components' => array(
 				'user' => array(
 				// enable cookie-based authentication by uncommenting the line below
-				'allowAutoLogin' => true,),
+				'allowAutoLogin' => false,),
 				// comment the following to disable URLs in path-format
 
 				'urlManager' => array('urlFormat' => 'path',

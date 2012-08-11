@@ -36,6 +36,7 @@
 
 div.form
 {
+	display:inline;
 }
 
 div.form input,
